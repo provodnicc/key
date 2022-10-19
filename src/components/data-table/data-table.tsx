@@ -19,7 +19,7 @@ const DataTable: FC<DataTableProps> = ({rowDatas})=>{
                 <div className='col-5'>КТ</div>
             </div>
             
-            {rowDatas.map(row => <DataTableRow rowData={row}/>)}
+            {rowDatas.map(row => <DataTableRow key={row.id} rowData={row}/>)}
             
         </div>
         

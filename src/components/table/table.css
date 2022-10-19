@@ -26,8 +26,10 @@
 }
 #list-ico{
     height: 20px;
-    background-color: rgb(226, 223, 223);
-    border: 1px solid rgb(170, 167, 167);
+    background-color: rgb(229, 211, 188);
+    border-top: 1px solid rgb(170, 167, 167);
+    border-right: 1px solid rgb(170, 167, 167);
+    border-bottom: 1px solid rgb(170, 167, 167);
 }
 .row{
     display: flex;

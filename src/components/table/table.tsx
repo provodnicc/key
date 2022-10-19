@@ -1,9 +1,29 @@
-import React from 'react'
+import React,{FC, useState} from 'react'
+
 import './table.css'
 import list from './list.png'
-const Table = () => {
+import List from '../list/list'
+import axios from 'axios'
+import config from '../../config.json'
+
+
+import { IRowData } from '../types/types'
+interface chekProps{
+    cheks: string []
+}
+
+const Table: FC<chekProps> = ({cheks}) => {
+    let [state, setState] = useState(false)
+    function activateList(){
+        setState(!state)
+    }
+
+    async function fetchDataTable(){
+        let data = await axios.get<IRowData>(config.API_URL)
+    }
+
     return (
-        <div className="Table">
+        <div onLoad={fetchDataTable} className="Table">
                 <div className='Block text'>
                     <div className='text-field hight'>
                         Номер:
@@ -34,9 +54,13 @@ const Table = () => {
                     </div> 
                     
                     <div className='row'>
-                        <div className='flex-box hight'>
-                            <input className='input-field required'/>
-                            <img src={list} alt='list' id='list-ico' />
+                        <div id='list' className='flex-box hight'>
+                            { state? <List data={cheks}/>: null}
+                            <input  className='input-field required'/>
+                        
+                            <img src={list} alt='посмотеть список счетов' id='list-ico' onClick={activateList}>
+
+                            </img>
                         </div>
                         <div className='input flex-box hight'>
                             <input className='input-field'/>

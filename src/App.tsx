@@ -30,9 +30,13 @@ function App() {
 
     },
   ]
+
+  const cheks = [
+    'asdad', 'adasda', 'adsdsa'
+  ]
   return (
     <div className="App">
-      <Table/>
+      <Table cheks={cheks}/>
       <DataTable rowDatas={data}/>
       
     </div>

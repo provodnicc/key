@@ -1,0 +1,6 @@
+.drop{
+    position: absolute;
+    z-index: 1;
+    background-color: aliceblue;
+    width: auto;
+}
