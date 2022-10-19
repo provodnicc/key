@@ -1,0 +1,45 @@
+.DataTable{
+    margin-top: 1%;
+    border: 1px solid rgb(169, 181, 184);
+}
+
+.base{
+    background-color: rgb(205, 209, 211);
+
+}
+.line{
+    background-color: rgb(220, 236, 243);
+}
+.Row{
+    display: flex;
+}
+.Row div{
+    /* border-left: 2px solid rgb(169, 181, 184); */
+    border-right: 2px solid rgb(169, 181, 184);
+}
+/* @media screen { */
+    /* width::before; */
+/* } */
+.col-1{
+    width: 10%;
+}
+
+.col-2{
+    width: 15%;
+
+}
+
+.col-3{
+    width: 25%;
+
+}
+
+.col-4{
+    width: 30%;
+
+}
+
+.col-5{
+    width: 20%;
+
+}
