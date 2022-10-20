@@ -15,7 +15,8 @@
 }
 .Row div{
     /* border-left: 2px solid rgb(169, 181, 184); */
-    border-right: 2px solid rgb(169, 181, 184);
+    border-right: 2px solid rgb(205, 222, 226);
+    border-bottom: 2px solid rgb(190, 205, 209);
 }
 /* @media screen { */
     /* width::before; */

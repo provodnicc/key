@@ -3,27 +3,21 @@ import React,{FC, useState} from 'react'
 import './table.css'
 import list from './list.png'
 import List from '../list/list'
-import axios from 'axios'
-import config from '../../config.json'
 
 
-import { IRowData } from '../types/types'
 interface chekProps{
-    cheks: string []
+    cheks: Array<string[]>
 }
 
 const Table: FC<chekProps> = ({cheks}) => {
     let [state, setState] = useState(false)
+    let [currentField, setCurrentField] = useState(['',''])
     function activateList(){
         setState(!state)
     }
 
-    async function fetchDataTable(){
-        let data = await axios.get<IRowData>(config.API_URL)
-    }
-
     return (
-        <div onLoad={fetchDataTable} className="Table">
+        <div className="Table">
                 <div className='Block text'>
                     <div className='text-field hight'>
                         Номер:
@@ -55,15 +49,38 @@ const Table: FC<chekProps> = ({cheks}) => {
                     
                     <div className='row'>
                         <div id='list' className='flex-box hight'>
-                            { state? <List data={cheks}/>: null}
-                            <input  className='input-field required'/>
+                            { state? <List setState={setState} setCurrentField={setCurrentField} data={cheks}/>: null}
+                            <input 
+                                value={currentField[0]} 
+                                onChange={(e)=>{ 
+                                    const data = [
+                                        e.target.value, 
+                                        currentField[1]
+                                    ]
+                                    setCurrentField(data) 
+                                }} 
+                                className='input-field required'
+                            />
                         
-                            <img src={list} alt='посмотеть список счетов' id='list-ico' onClick={activateList}>
-
+                            <img 
+                                src={list} 
+                                alt='посмотеть список счетов' 
+                                id='list-ico' 
+                                onClick={activateList}>
                             </img>
                         </div>
                         <div className='input flex-box hight'>
-                            <input className='input-field'/>
+                            <input 
+                                value={currentField[1]} 
+                                onChange={(e)=>{ 
+                                    const data = [
+                                        currentField[0], 
+                                        e.target.value
+                                    ]
+                                    setCurrentField( data) 
+                                }}
+                                className='input-field'
+                            />
                         </div>
                     </div>  
 
