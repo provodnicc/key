@@ -31,6 +31,11 @@
     border-right: 1px solid rgb(170, 167, 167);
     border-bottom: 1px solid rgb(170, 167, 167);
 }
+.saveBtn{
+    position: absolute;
+    font-size: 20px;
+    top: -35px;
+}
 .row{
     display: flex;
     justify-content: space-between;
@@ -65,6 +70,6 @@ input{
     padding-left: 5px;
 }
 
-@media screen and (min-width: 800px) {
-    
+.input-field-false{
+    border: 1px solid red;
 }

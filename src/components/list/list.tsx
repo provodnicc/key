@@ -2,15 +2,25 @@ import React, {Dispatch, FC, SetStateAction, useState} from "react";
 import './list.css'
 interface ListProps{
     setCurrentField: Dispatch<SetStateAction< string[]>>,
-    setState:  Dispatch<SetStateAction< boolean>>,
+    setListState:  Dispatch<SetStateAction< boolean>>,
+    setInputBillNumber:  Dispatch<SetStateAction< string>>,
+    setInputBillName:  Dispatch<SetStateAction< string>>,
     data: Array<string[]>,
 }
 
-const List: FC<ListProps> = ({data, setCurrentField, setState}) => {
+const List: FC<ListProps> = ({
+    setCurrentField, 
+    setListState, 
+    setInputBillNumber,
+    setInputBillName, 
+    data  
+}) => {
 
     function setCurrent(field: string[]){
         setCurrentField(field)
-        setState(false)
+        setListState(false)
+        setInputBillNumber(field[0])
+        setInputBillName(field[1])
     }
     return   (
         <div>

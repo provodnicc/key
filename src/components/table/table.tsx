@@ -3,18 +3,51 @@ import React,{FC, useState} from 'react'
 import './table.css'
 import list from './list.png'
 import List from '../list/list'
+import { IInputData } from '../types/types'
 
 
-interface chekProps{
-    cheks: Array<string[]>
+interface billProps{
+    bills: Array<string[]>
 }
 
-const Table: FC<chekProps> = ({cheks}) => {
-    let [state, setState] = useState(false)
+const input_data = {
+    phone: '',
+    date: '',
+    date_connection: '',
+    bill_number: '',
+    bill_name: '',
+    correspondent: '',
+    name_income: '',
+}
+
+const Table: FC<billProps> = ({bills}) => {
+    let [listState, setListState] = useState(false)
     let [currentField, setCurrentField] = useState(['',''])
+
+    let [inputPhone, setInputPhone] = useState('')
+    let [inputDate, setInputDate] = useState('')
+    let [inputDateConn, setInputDateConn] = useState('')
+    let [inputBillNumber, setInputBillNumber] = useState('')
+    let [inputBillName, setInputBillName] = useState('')
+    let [inputCorrespondent, setInputCorrespondent] = useState('')
+    let [inputNameIncome, setInputNameIncome] = useState('')
+
     function activateList(){
-        setState(!state)
+        setListState(!listState)
     }
+
+    function checkInputs(){
+        const inputs = document.getElementsByClassName('input-field required')
+        if(!inputDate){
+            inputs[0].className += ' input-field-false'
+        }
+
+        if(!inputBillNumber){
+            inputs[1].className += ' input-field-false' 
+        }
+
+    }
+
 
     return (
         <div className="Table">
@@ -33,33 +66,56 @@ const Table: FC<chekProps> = ({cheks}) => {
                     </div>
                 </div>
                     
-                <div className='Block input'>
+                <form className='Block input'>
+                <button onClick={checkInputs} type={'submit'} className='saveBtn'>Сохранить</button>
                     <div className='row '>
                         <div className='flex-box hight'>
-                            <input type={'phone'} className='input-field'/>
+
+                            <input 
+                                onChange={(e)=>setInputPhone(e.target.value)}
+                                className='input-field'
+                            />
                             <span className='input-text'>Дата*:</span>
-                            <input type={'date'} className='input-field required'/>
+                            <input 
+                                onChange={(e)=>setInputDate(e.target.value)}
+                                type={'date'} 
+                                className='input-field required' 
+                                required
+                            />
                         </div>
 
                         <div className='flex-box hight'>
                             <span className='input-text'>Дата проводки:</span>
-                            <input type={'date'} />
+                            <input 
+                                onChange={(e)=>setInputDateConn(e.target.value)}
+                                type={'date'} 
+                            />
                         </div>
                     </div> 
                     
                     <div className='row'>
                         <div id='list' className='flex-box hight'>
-                            { state? <List setState={setState} setCurrentField={setCurrentField} data={cheks}/>: null}
+                            { listState? 
+                                <List 
+                                    setListState={setListState} 
+                                    setCurrentField={setCurrentField} 
+                                    setInputBillNumber={setInputBillNumber}
+                                    setInputBillName={setInputBillName}
+                                    data={bills}
+                                /> : null
+                            }
                             <input 
                                 value={currentField[0]} 
-                                onChange={(e)=>{ 
+                                onChange={(e)=>{
                                     const data = [
-                                        e.target.value, 
+                                        e.target.value,
                                         currentField[1]
                                     ]
                                     setCurrentField(data) 
+                                    setInputBillNumber(e.target.value)
                                 }} 
                                 className='input-field required'
+                                required
                             />
                         
                             <img 
@@ -77,7 +133,8 @@ const Table: FC<chekProps> = ({cheks}) => {
                                         currentField[0], 
                                         e.target.value
                                     ]
-                                    setCurrentField( data) 
+                                    setCurrentField(data)
+                                    setInputBillName(e.target.value)
                                 }}
                                 className='input-field'
                             />
@@ -85,13 +142,19 @@ const Table: FC<chekProps> = ({cheks}) => {
                     </div>  
 
                     <div className='row hight'>
-                        <input className='input-field'/>
+                        <input 
+                            onChange={(e)=>setInputCorrespondent(e.target.value)}
+                            className='input-field'
+                        />
                     </div>
 
                     <div className='row hight'>
-                        <input className='input-field'/>
+                        <input 
+                            onChange={(e)=>setInputNameIncome(e.target.value)}
+                            className='input-field'
+                        />
                     </div>
-            </div>
+            </form>
         </div>
     )
 

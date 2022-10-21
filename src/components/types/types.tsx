@@ -5,3 +5,13 @@ export interface IRowData{
     DT: string
     KT: string
 }
+
+export interface IInputData {
+    phone: string
+    date: string
+    date_connection: string
+    bill_number: string
+    bill_name: string
+    correspondent: string
+    name_income: string
+}
