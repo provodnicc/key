@@ -42,8 +42,12 @@ export class AuthService {
         }
         const userDto = new GetUserDto(user)
         const tokens = await this.generateTokens({...userDto})
-    
+        await this.saveToken(tokens.refreshToken)
         return {userDto, ...tokens}
+    }
+
+    async saveToken(token: string){
+        await this.tokenRepository.save({refreshToken: token})
     }
 
     async generateTokens(payload: any){

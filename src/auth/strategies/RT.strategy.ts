@@ -22,6 +22,7 @@ export class RTStrategy extends PassportStrategy(Strategy, 'rt-strategy'){
     }
 
     async validate(payload: any){
+        
         return payload
     }
 }

@@ -2,8 +2,12 @@ import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
+import { Roles } from './decorators/roles.decorator';
 import { SignInDto } from './dtos/sign-in.dto';
 import { SignUpDto } from './dtos/sign-up.dto';
+import { Role } from './enums/roles.enum';
+import { JWTAuthGuard } from './guards/jwt-auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 import { RTStrategy } from './strategies/RT.strategy';
 
 @Controller('auth')
@@ -31,7 +35,7 @@ export class AuthController {
     return context
   }
 
-  @UseGuards(AuthGuard('rt-strategy'))
+  @UseGuards(JWTAuthGuard)
   @Get('logout')
   async logOut(
     @Res({passthrough: true})
@@ -51,5 +55,13 @@ export class AuthController {
       }
     )
     return res
+  }
+
+  @UseGuards(JWTAuthGuard, RolesGuard)
+  @Get('check')
+  @Roles(Role.ADMIN)
+  async check(@Req() req){
+    // console.log(req)
+    return req.user
   }
 }
