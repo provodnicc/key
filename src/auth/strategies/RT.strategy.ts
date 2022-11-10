@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
 import { ExtractJwt, Strategy } from "passport-jwt";
+import { GetUserDto } from "src/users/dtos/get-user.dto";
 
 @Injectable()
 export class RTStrategy extends PassportStrategy(Strategy, 'rt-strategy'){
@@ -23,6 +24,6 @@ export class RTStrategy extends PassportStrategy(Strategy, 'rt-strategy'){
 
     async validate(payload: any){
         
-        return payload
+        return new GetUserDto(payload)
     }
 }

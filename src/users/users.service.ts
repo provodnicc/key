@@ -16,6 +16,10 @@ export class UsersService {
         return await this.userRepository.save(encrypted)
     }
 
+    async update(user: User){
+        return await this.userRepository.save(user)
+    }
+
     async getUserById(id: number){
         const user = await this.userRepository.findOneBy({id: id})
         return user
@@ -24,5 +28,11 @@ export class UsersService {
     async getUserByEmail(email: string){
         const user = await this.userRepository.findOneBy({email: email})
         return user
+    }
+
+    async getUsers(){
+        return await this.userRepository.find({
+            relations: ['sessions']
+        })
     }
 }

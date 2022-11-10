@@ -1,5 +1,6 @@
-import { Role } from "src/auth/enums/roles.enum";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { UserSession } from "../../sessions/entities/session.entity";
+import { Role } from "../../auth/enums/roles.enum";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
 
@@ -16,4 +17,7 @@ export class User{
 
     @Column({default: Role.USER})
     role: string
+
+    @OneToMany(()=>UserSession, (usersession)=>usersession.user)
+    sessions: UserSession[]
 }

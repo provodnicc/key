@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { TimeoutInterceptor } from './interceptors/timeoutinterceptor';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const PORT = process.env.API_PORT
@@ -17,6 +18,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   app.enableCors()
   app.use(cookieParser())
+  app.useGlobalInterceptors(new TimeoutInterceptor())
 
   await app.listen(PORT, ()=>logger.warn('PORT: '+PORT));
 }

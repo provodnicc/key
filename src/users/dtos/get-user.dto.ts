@@ -5,7 +5,7 @@ export class GetUserDto{
     id: number
     email: string
     role: string
-    constructor(model: GetUserDto){
+    constructor(model: any){
         this.id=model.id
         this.email=model.email
         this.role=model.role

@@ -1,14 +1,13 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Response } from 'express';
+import { Request, Response } from 'express';
+import { Host } from 'src/interfaces/host.interface';
+import { GetUserDto } from 'src/users/dtos/get-user.dto';
 import { AuthService } from './auth.service';
-import { Roles } from './decorators/roles.decorator';
 import { SignInDto } from './dtos/sign-in.dto';
 import { SignUpDto } from './dtos/sign-up.dto';
-import { Role } from './enums/roles.enum';
-import { JWTAuthGuard } from './guards/jwt-auth.guard';
-import { RolesGuard } from './guards/roles.guard';
-import { RTStrategy } from './strategies/RT.strategy';
+import { RefreshGuard } from './guards/rt.guard';
+
 
 @Controller('auth')
 export class AuthController {
@@ -19,49 +18,67 @@ export class AuthController {
     @Body()
     signUpDto: SignUpDto
   ){
-    
     return await this.authService.signUp(signUpDto)
   }
 
   @Post('sign-in')
   async signIn(
+    @Req()
+    req: Request,
+    
+    @Body()
+    signInDto: SignInDto,
+
     @Res({passthrough: true })
     res: Response,
-    @Body()
-    signInDto: SignInDto
   ){
-    const context = await this.authService.signIn(signInDto)
-    this.setCookie(res, context.refreshToken)
+    const host = this.authService.getHostInfo(req)
+
+    const context = await this.authService.signIn(signInDto, host)
+    this.authService.setCookie(res, context.refreshToken)
     return context
   }
+  
+  @UseGuards(RefreshGuard)
+  @Patch('refresh')
+  async refresh(
+    @Req()
+    req: Request,
 
-  @UseGuards(JWTAuthGuard)
-  @Get('logout')
-  async logOut(
     @Res({passthrough: true})
     res: Response
   ){
+    const host: Host = this.authService.getHostInfo(req)
+    const user = new GetUserDto({...req.user})
+    const token: string = req.cookies['refreshToken']
+
+    const tokens = await this.authService.refresh(user, token, host)
+    this.authService.setCookie(res, tokens.refreshToken)
+    return tokens.accessToken
+  }
+
+  @UseGuards(RefreshGuard)
+  @Delete('logout')
+  async logOut(
+    @Res({passthrough: true})
+    res: Response,
+
+    @Req()
+    req: Request
+  ){
+    const token = req.cookies['refreshToken']
+
+    await this.authService.logout(token)
     res.clearCookie('refreshToken')
   }
 
-  async setCookie(res: Response, refreshToken: string){
-    res.cookie(
-      'refreshToken',
-      refreshToken,
-      {
-        maxAge: 1000*60*60,
-        httpOnly:true,
-        secure: process.env.DEBUG? false : true
-      }
-    )
-    return res
-  }
+  
 
-  @UseGuards(JWTAuthGuard, RolesGuard)
-  @Get('check')
-  @Roles(Role.ADMIN)
-  async check(@Req() req){
-    // console.log(req)
-    return req.user
-  }
+  // @UseGuards(JWTAuthGuard, RolesGuard)
+  // @Get('check')
+  // @Roles(Role.USER, Role.ADMIN)
+  // async check(@Req() req){
+  //   console.log(req)
+  //   return req.user
+  // }
 }

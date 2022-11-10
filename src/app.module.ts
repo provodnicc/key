@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { RolesGuard } from './auth/guards/roles.guard';
 import { UsersModule } from './users/users.module';
+import { TokensModule } from './tokens/tokens.module';
+import { SessionsModule } from './sessions/sessions.module';
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { UsersModule } from './users/users.module';
       synchronize: true
     }), 
     AuthModule, 
-    UsersModule
+    UsersModule, TokensModule, SessionsModule
   ],
   providers:[],
   exports: [TypeOrmModule]
